@@ -74,3 +74,17 @@ go run main.go
 - Memory > 85%
 
 - Disk > 90%
+
+# 🔹 How to use on GitHub
+
+1. Create a `go-monitor` repository.
+2. Copy all files, including the `agent`, `server`, `web`, `config`, and `docker` folders.
+3. Add `.gitignore` for Go and Docker.
+4. Push to GitHub:
+```bash
+git init
+git add .
+git commit -m "Initial commit Go-Monitor"
+git branch -M main
+git remote add origin https://github.com/mscbuild/Go-Monitor.git
+git push -u origin main
