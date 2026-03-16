@@ -1,17 +1,57 @@
-version: '3'
+version: '3.8'
+
 services:
+
   postgres:
-    image: postgres
+    image: postgres:15-alpine
+    container_name: monitor_postgres
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: monitor
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - monitor-net
+
   server:
-    build: ./docker/Dockerfile.server
-    ports:
-      - "8080:8080"
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.server
+    container_name: monitor_server
     depends_on:
       - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: pass
+      DB_NAME: monitor
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - monitor-net
+
   agent:
-    build: ./docker/Dockerfile.agent
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.agent
+    container_name: monitor_agent
+    environment:
+      SERVER_URL: http://server:8080/metrics
+      NODE_NAME: web-server-1
+      INTERVAL: 10
+    depends_on:
+      - server
+    networks:
+      - monitor-net
+
+volumes:
+  postgres_data:
+
+networks:
+  monitor-net:
+    driver: bridge
