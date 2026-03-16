@@ -1,0 +1,3 @@
+server_url: http://monitor-server:8080/metrics
+interval: 10
+node_name: web-server-1
