@@ -1,0 +1,13 @@
+# docker/Dockerfile.agent
+FROM golang:1.22-alpine
+
+WORKDIR /app
+
+# Copy the agent code
+COPY ../agent ./
+
+# Build
+RUN go mod init agent && go build -o agent main.go
+
+# Run
+CMD ["./agent"]
