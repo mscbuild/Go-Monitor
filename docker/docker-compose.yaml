@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: monitor
+    ports:
+      - "5432:5432"
+  server:
+    build: ./docker/Dockerfile.server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+  agent:
+    build: ./docker/Dockerfile.agent
